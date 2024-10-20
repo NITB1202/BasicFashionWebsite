@@ -9,13 +9,6 @@ namespace BasicFashionWebsite.Server.Database
         public DbSet<Product> products { get; set; }
         public DbSet<Invoice> invoices { get; set; }
         public DbSet<InvoiceDetails> details { get; set; }
-
-        public string connectionString = @"Server=localhost;Database=Fashion;Integrated Security=True;";
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(connectionString);
-        }
+        public FashionDbContext(DbContextOptions<FashionDbContext> options) : base(options){}
     }
 }

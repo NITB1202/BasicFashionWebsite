@@ -21,6 +21,6 @@ namespace BasicFashionWebsite.Server.Models
         [Range(1, int.MaxValue)]
         public int total { get; set; }
 
-        public virtual required Account Account { get; set; }
+        public required Account Account { get; set; }
     }
 }

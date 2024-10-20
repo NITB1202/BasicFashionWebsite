@@ -10,21 +10,21 @@ namespace BasicFashionWebsite.Server.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int product_id { get; set; }
 
-        [MaxLength(100)]
-        public required string image_link { get; set; }
+        [StringLength(100)]
+        public string? image_link { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [StringLength(100)]
         public required string name { get; set; }
 
-        [MaxLength(200)]
+        [StringLength(200)]
         public required string description { get; set; }
 
         [Range(0, int.MaxValue)]
         public int stock_quantity { get; set; } = 0;
 
         [Required]
-        [Range(0,int.MaxValue)]
-        public int cost { get; set; }
+        [Range(1,int.MaxValue)]
+        public int? cost { get; set; }
     }
 }

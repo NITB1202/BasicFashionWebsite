@@ -21,5 +21,8 @@ namespace BasicFashionWebsite.Server.Models
         [Required]
         [Range(1, int.MaxValue)]
         public int quantity = 0;
+
+        public required Invoice Invoice { get; set; }
+        public required Product Product { get; set; }
     }
 }
