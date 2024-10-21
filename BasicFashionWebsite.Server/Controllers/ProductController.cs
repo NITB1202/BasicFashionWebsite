@@ -1,83 +1,83 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BasicFashionWebsite.Server.Database;
+using BasicFashionWebsite.Server.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BasicFashionWebsite.Server.Controllers
 {
+    [Route("Product")]
     public class ProductController : Controller
     {
-        // GET: ProductController
-        public ActionResult Index()
+        private readonly FashionDbContext db;
+
+        public ProductController(FashionDbContext db)
         {
-            return View();
+            this.db = db;
         }
 
-        // GET: ProductController/Details/5
-        public ActionResult Details(int id)
+        //GET: product
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
-            return View();
+            var products = await db.products.ToListAsync();
+            return products;
         }
 
-        // GET: ProductController/Create
-        public ActionResult Create()
+        //GET: product/find-by-id?id=1
+        [HttpGet]
+        public async Task<ActionResult<Product>> GetProductByName([FromQuery] int id)
         {
-            return View();
+            var product = await db.products.FindAsync(id);
+            if(product == null)
+                return NotFound("Can't find product.");
+            return Ok(product);
         }
 
-        // POST: ProductController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        //POST: product/create
+        [HttpPost("create")]
+        public async Task<ActionResult> CreateNewProduct([FromBody] Product product)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            if (product == null)
+                return BadRequest("Product can't be null");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            db.products.Add(product);
+            await db.SaveChangesAsync();
+            return Ok();
         }
 
-        // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        //PUT: product/update-by-id?id=1
+        [HttpPut("update-by-id")]
+        public async Task<ActionResult> UpdateProductById([FromQuery] int id, [FromBody] Product updatedProduct)
         {
-            return View();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var product  = await db.products.FindAsync(id);
+
+            if (product == null)
+                return NotFound();
+
+            db.Entry(product).CurrentValues.SetValues(updatedProduct);
+            await db.SaveChangesAsync();
+            return Ok();
         }
 
-        // POST: ProductController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        //DELETE: product/delete-by-id?id=1
+        [HttpDelete("delete-by-id")]
+        public async Task<ActionResult> DeleteProductById([FromQuery]int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var product = await db.products.FindAsync(id);
 
-        // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+            if (product == null)
+                return NotFound();
 
-        // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            db.products.Remove(product);
+            await db.SaveChangesAsync();
+            return Ok();
         }
     }
 }

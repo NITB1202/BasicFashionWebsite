@@ -17,7 +17,7 @@ namespace BasicFashionWebsite.Server.Controllers
             _context = context;
         }
 
-        // GET: Account
+        // GET: account
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAllAccounts()
         {
