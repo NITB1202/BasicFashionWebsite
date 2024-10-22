@@ -46,6 +46,18 @@ export default defineConfig({
             '^/account': {
                 target,
                 secure: false
+            },
+            '^/product': {
+                target,
+                secure: false
+            },
+            '^/invoice': {
+                target,
+                secure: false
+            },
+            '^/details': {
+                target,
+                secure: false
             }
         },
         port: 5173,
