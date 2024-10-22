@@ -25,7 +25,7 @@ namespace BasicFashionWebsite.Server.Controllers
         }
 
         //GET: product/find-by-id?id=1
-        [HttpGet]
+        [HttpGet("find-by-id")]
         public async Task<ActionResult<Product>> GetProductByName([FromQuery] int id)
         {
             var product = await db.products.FindAsync(id);
